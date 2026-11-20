@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+
+/*
+ * SentinelOS X design tokens.
+ *
+ * Principle: the chrome is monochrome graphite and colour only ever means
+ * state. Red = something is broken now, amber = needs a person, blue =
+ * contained / in hand, green = recovered, violet = at risk. Interactive
+ * elements are neutral (light primary buttons), so a coloured thing on screen
+ * is always worth reading.
+ *
+ * Fonts are the operating system's own UI and mono faces. The command center is
+ * meant to run on an isolated network, so it makes no request to a font CDN or
+ * any other third-party host.
+ *
+ * `slate`, `ink` and `cyan` are re-tuned here so every existing screen picks up
+ * the new palette: slate = neutral text greys, ink = graphite surfaces,
+ * cyan = the single "in hand / focus" blue.
+ */
+@theme {
+  --color-ink-950: #111317;
+  --color-ink-900: #171a1f;
+  --color-ink-850: #1c1f25;
+  --color-ink-800: #22262d;
+  --color-ink-700: #2c3139;
+  --color-ink-600: #3a4049;
+
+  --color-slate-50: #f4f5f7;
+  --color-slate-100: #e7e9ec;
+  --color-slate-200: #cfd3d9;
+  --color-slate-300: #b4bac3;
+  --color-slate-400: #969da8;
+  --color-slate-500: #757c88;
+  --color-slate-600: #5a606b;
+  --color-slate-700: #424852;
+
+  --color-cyan-50: #eef5ff;
+  --color-cyan-100: #dceafe;
+  --color-cyan-200: #bdd6fd;
+  --color-cyan-300: #94bcfa;
+  --color-cyan-400: #6fa3f6;
+  --color-cyan-500: #4f8bef;
+  --color-cyan-600: #3a71d4;
+  --color-cyan-950: #0f1b31;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  font-size: 15px;
+}
+
+body {
+  background: var(--color-ink-950);
+  color: var(--color-slate-100);
+  font-family: var(--font-sans);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' 1;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cyan-400);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-cyan-500) 40%, transparent);
+}
+
+/* Surfaces ---------------------------------------------------------------- */
+
+@utility panel {
+  @apply rounded-lg border border-ink-700 bg-ink-900;
+}
+
+@utility panel-header {
+  @apply flex min-h-11 items-center justify-between gap-3 border-b border-ink-700 px-4 py-2;
+}
+
+/* Sentence case, no tracking: titles are read, not decorated. */
+@utility panel-title {
+  @apply text-sm font-semibold text-slate-100;
+}
+
+/* Buttons ------------------------------------------------------------------ */
+
+@utility btn {
+  @apply inline-flex min-h-8 items-center justify-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-45;
+}
+@utility btn-primary {
+  @apply btn bg-slate-100 text-ink-950 hover:bg-white;
+}
+@utility btn-danger {
+  @apply btn bg-red-600 text-white hover:bg-red-500;
+}
+@utility btn-ghost {
+  @apply btn border border-ink-600 bg-ink-850 text-slate-200 hover:border-slate-600 hover:bg-ink-800 hover:text-slate-50;
+}
+
+@utility input {
+  @apply w-full rounded-md border border-ink-600 bg-ink-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/25 focus:outline-none;
+}
+
+/* Small helpers ------------------------------------------------------------ */
+
+/* Identifiers and clock times: the only things set in mono. */
+@utility ident {
+  @apply font-mono text-[12px] text-slate-400;
+}
+
+/* React Flow ---------------------------------------------------------------- */
+.react-flow {
+  --xy-background-color: var(--color-ink-950);
+  --xy-background-color-default: var(--color-ink-950);
+}
+.react-flow__attribution {
+  background: transparent !important;
+}
+.react-flow__attribution a {
+  color: var(--color-slate-600) !important;
+}
+.react-flow__controls {
+  box-shadow: none !important;
+}
+.react-flow__controls button {
+  background: var(--color-ink-850) !important;
+  border-color: var(--color-ink-700) !important;
+  fill: var(--color-slate-300) !important;
+}
+
+/* 3D datacenter overlay ------------------------------------------------------ */
+.dc-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 3px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--color-ink-600);
+  background: color-mix(in oklab, var(--color-ink-900) 88%, transparent);
+  color: var(--color-slate-100);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: transform;
+}
+.dc-label[data-root='true'] {
+  border-color: #f0524f;
+  font-weight: 600;
+}
+.dc-label .dc-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+.dc-label .dc-word {
+  color: var(--color-slate-400);
+}
+@keyframes dc-caption-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.dc-caption {
+  animation: dc-caption-in 0.35s ease-out both;
+}
+
+/* Scrollbars stay quiet on the dark surfaces. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-600) transparent;
+}
+
+/* One deliberate motion: a live alert pulse on the situation bar. */
+@keyframes sentinel-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.live-pulse {
+  animation: sentinel-pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,26 @@
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+**/arduino_secrets.h
+
+# Dependencies and generated output
+**/node_modules/
+**/.venv/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/*.egg-info/
+**/dist/
+**/build/
+**/coverage/
+**/.vite/
+**/.tokens/
+**/.openshell-upload/
+
+# Local archives and editor/OS files
+*.zip
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
